@@ -6,15 +6,13 @@ public class Projectile : MonoBehaviour
     private float speed;
     private float timer;
     private float lifetime;
-    private bool killable;
 
-    public void SetConfigurations(float lifetime, float speed, Vector3 direction, bool killable)
+    public void SetConfigurations(float lifetime, float speed, Vector3 direction)
     {
         this.direction = direction;
         this.timer = 0;
         this.lifetime = lifetime;
         this.speed = speed;
-        this.killable = killable;
     }
 
     protected void FixedUpdate()
@@ -33,12 +31,8 @@ public class Projectile : MonoBehaviour
 
         if (timer * speed >= lifetime)
         {
-            if (killable == false)
-            {
-                ReturnToPool();
-                return;
-            }
-            Destroy(gameObject);
+            ReturnToPool();
+            return;
         }
     }
 

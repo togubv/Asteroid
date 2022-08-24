@@ -4,16 +4,18 @@ public class ProjectileUFO : Projectile
 {
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("Player"))
+        if (collider.gameObject.TryGetComponent<Player>(out Player player))
         {
-            collider.GetComponent<IKillable>().Kill(Sender.None);
-            Destroy(gameObject);
+            player.Kill(Sender.None);
+            ReturnToPool();
+            return;
         }
 
-        if (collider.gameObject.CompareTag("Asteroid"))
+        if (collider.gameObject.TryGetComponent<Asteroid>(out Asteroid asteroid))
         {
-            collider.gameObject.GetComponent<IKillable>().Kill(Sender.None);
-            Destroy(gameObject);
+            asteroid.Kill(Sender.None);
+            ReturnToPool();
+            return;
         }
     }
 }

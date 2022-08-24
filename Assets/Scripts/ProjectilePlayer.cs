@@ -1,21 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectilePlayer : Projectile
 {
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("Asteroid"))
+        if (collider.gameObject.TryGetComponent<Asteroid>(out Asteroid asteroid))
         {
-            collider.gameObject.GetComponent<IKillable>().Kill(Sender.Player);
+            asteroid.Kill(Sender.Player);
             ReturnToPool();
+            return;
         }
 
-        if (collider.gameObject.CompareTag("UFO"))
+        if (collider.gameObject.TryGetComponent<UFO>(out UFO ufo))
         {
-            collider.gameObject.GetComponent<IKillable>().Kill(Sender.Player);
+            ufo.Kill(Sender.Player);
             ReturnToPool();
+            return;
         }
     }
 }

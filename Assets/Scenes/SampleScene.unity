@@ -399,6 +399,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 300521784}
   m_CullTransparentMesh: 1
+--- !u!1 &306845500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 306845501}
+  m_Layer: 0
+  m_Name: Projectiles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &306845501
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306845500}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1117354484}
+  - {fileID: 1541091255}
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &325294495
 GameObject:
   m_ObjectHideFlags: 0
@@ -2097,6 +2130,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046767362}
   m_CullTransparentMesh: 1
+--- !u!1 &1117354483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1117354484}
+  - component: {fileID: 1117354485}
+  m_Layer: 0
+  m_Name: ProjectilePoolPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1117354484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117354483}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 306845501}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1117354485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117354483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f7c6e82ed34bf142b1e89d7f9cd96fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: -8006335413503933113, guid: 0e7c270e6c5ee504dbb558f3f4d8619d, type: 3}
 --- !u!114 &1124956583 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1071091003948561796, guid: 66c3395a37accdb4996790141d469c97, type: 3}
@@ -2446,6 +2524,10 @@ PrefabInstance:
       propertyPath: core
       value: 
       objectReference: {fileID: 730255852}
+    - target: {fileID: 1071091003948561796, guid: 66c3395a37accdb4996790141d469c97, type: 3}
+      propertyPath: projectilePoolPlayer
+      value: 
+      objectReference: {fileID: 1117354485}
     - target: {fileID: 1071091003948561798, guid: 66c3395a37accdb4996790141d469c97, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -2500,6 +2582,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66c3395a37accdb4996790141d469c97, type: 3}
+--- !u!1 &1541091254
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1541091255}
+  - component: {fileID: 1541091256}
+  m_Layer: 0
+  m_Name: ProjectilePoolUFO
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1541091255
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541091254}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 306845501}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1541091256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541091254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f3756303bd68b4faaa21825180d306, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: -5596128400605801454, guid: f2b47d56337648b44a75b0d27b5a0cb7, type: 3}
 --- !u!1 &1642015754
 GameObject:
   m_ObjectHideFlags: 0
@@ -2896,6 +3023,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a2f595b1aed36d4fa1b3a2f82c7b339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectilePoolPlayer: {fileID: 1117354485}
+  projectilePoolUFO: {fileID: 1541091256}
   large: {fileID: 2767662449984599460, guid: 373148d478ec97a468f394d889c61f8f, type: 3}
   medium: {fileID: -4857705185005551150, guid: 19b7234e9121ac742825a65513909cee, type: 3}
   small: {fileID: 1724873444298832740, guid: 0176cf90133ba8d4ea8300dd415e5ecf, type: 3}
@@ -2907,12 +3036,12 @@ MonoBehaviour:
   rewardAsteroidLarge: 20
   rewardAsteroidMedium: 50
   rewardAsteroidSmall: 100
-  countStartAsteroids: 2
+  countStartAsteroids: 1
   asteroidSpeedMin: 0.5
   asteroidSpeedMax: 2
   splitAngle: 45
-  ufoIntervalMin: 20
-  ufoIntervalMax: 40
+  ufoIntervalMin: 5
+  ufoIntervalMax: 10
 --- !u!4 &1937756326
 Transform:
   m_ObjectHideFlags: 0

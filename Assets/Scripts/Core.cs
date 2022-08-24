@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Core : MonoBehaviour
@@ -33,6 +31,12 @@ public class Core : MonoBehaviour
     }
 }
 
+public enum BorderAxis
+{
+    x,
+    y
+}
+
 public enum PlayerControl
 {
     Keyboard,
@@ -48,4 +52,11 @@ public enum Sender
 {
     None,
     Player,
+}
+
+public enum AsteroidSize
+{
+    Large,
+    Medium,
+    Small
 }

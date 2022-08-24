@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    [Header("Projectiles pools")]
+    [SerializeField] private ProjectilePoolPlayer projectilePoolPlayer;
+    [SerializeField] private ProjectilePoolUFO projectilePoolUFO;
+
     [Header("Asteroids prefabs")]
     [SerializeField] private Asteroid large;
     [SerializeField] private Asteroid medium;
@@ -46,6 +50,7 @@ public class LevelManager : MonoBehaviour
     private int score;
 
     private Transform asteroidsInWorld;
+    private Transform ufoProjectiles;
     private int currentLevel;
     private int countAsteroids;
     private float sizeX, sizeY;
@@ -80,6 +85,8 @@ public class LevelManager : MonoBehaviour
         projectileUFOPool = new List<ProjectileUFO>();
         ufoPool = new List<UFO>();
         ufoInLevel = new List<UFO>();
+        GameObject projectiles = new GameObject("UFOProjectiles");
+        ufoProjectiles = projectiles.transform;
         GameObject asteroids = new GameObject("Asteroids");
         asteroidsInWorld = asteroids.transform;
         playerTransform = player.GetComponent<Transform>();
@@ -130,11 +137,8 @@ public class LevelManager : MonoBehaviour
         }
 
         projectileUFOPool = new List<ProjectileUFO>();
-
-        for (int i = 0; i < player.ProjectilePool.Count; i++)
-        {
-            player.ProjectilePool[i].gameObject.SetActive(false);
-        }
+        projectilePoolPlayer.DisableAllProjectiles();
+        projectilePoolUFO.DisableAllProjectiles();
     }
 
     public void StartNewGame()
@@ -316,7 +320,7 @@ public class LevelManager : MonoBehaviour
         int direction = RandomUFODirection();
         float randomY = Random.Range(-(sizeY - (sizeY * 0.4f)), sizeY - (sizeY * 0.4f));
         ufo.transform.position = new Vector3(sizeX * direction, randomY, 0);
-        ufo.SetConfigurations(this, direction * -1, 1.75f, sizeX * 1.2f, playerTransform);
+        ufo.SetConfigurations(this, projectilePoolUFO, direction * -1, 1.75f, sizeX * 1.2f, playerTransform);
         ufo.gameObject.SetActive(true);
     }
 

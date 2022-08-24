@@ -60,24 +60,32 @@ public class Asteroid : MonoBehaviour, IKillable
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("UFO"))
+        if (collider.TryGetComponent<UFO>(out UFO ufo))
         {
             KillWithoutSplit();
+            return;
         }
 
-        if (collider.gameObject.CompareTag("Player"))
+        if (collider.TryGetComponent<Player>(out Player player))
         {
-            if (collider.gameObject.GetComponent<Player>().IsInvulnerable == false)
+            if (player.IsInvulnerable == false)
             {
                 KillWithoutSplit();
             }
+            return;
         }
-    }
-}
 
-public enum AsteroidSize
-{
-    Large,
-    Medium,
-    Small
+        //if (collider.gameObject.CompareTag("UFO"))
+        //{
+        //    KillWithoutSplit();
+        //}
+
+        //if (collider.gameObject.CompareTag("Player"))
+        //{
+        //    if (collider.gameObject.GetComponent<Player>().IsInvulnerable == false)
+        //    {
+        //        KillWithoutSplit();
+        //    }
+        //}
+    }
 }

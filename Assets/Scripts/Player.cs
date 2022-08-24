@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour, IKillable
 {
     [SerializeField] private Core core;
-    [SerializeField] private ProjectilePlayer prefabProjectile;
+    [SerializeField] private ProjectilePoolPlayer projectilePoolPlayer;
 
     [SerializeField] private float rotateSpeed;
     [SerializeField] private float projectileSpeed;
@@ -22,9 +22,6 @@ public class Player : MonoBehaviour, IKillable
 
     private float projectileLifeTime;
     private bool isCooldown;
-    private Transform projectilesInWorld;
-    private List<ProjectilePlayer> projectilePool;
-    public List<ProjectilePlayer> ProjectilePool => projectilePool;
 
     private Vector3 inertion;
     private float racing;
@@ -47,6 +44,7 @@ public class Player : MonoBehaviour, IKillable
 
     public void RefreshPlayer()
     {
+        isRacing = false;
         transform.rotation = Quaternion.identity;
         racing = 0;
         inputVertical = 0;
@@ -55,13 +53,11 @@ public class Player : MonoBehaviour, IKillable
         SetInvulnerability(3.0f, 0.5f);
     }
 
+
     private void Start()
     {
         core.ChangePlayerControlHandlerEvent += ChanglePlayerControl;
-        projectilePool = new List<ProjectilePlayer>();
         projectileLifeTime = Screen.width / 100;
-        GameObject projectiles = new GameObject("Projectiles");
-        projectilesInWorld = projectiles.transform;
         cameraMain = Camera.main;
         spriteR = GetComponent<SpriteRenderer>();
 
@@ -140,40 +136,6 @@ public class Player : MonoBehaviour, IKillable
             PlayerRotateMouse();
     }
 
-    private ProjectilePlayer ProjectileGetFromPool(Vector3 playerPosition)
-    {
-        if (projectilePool.Count == 0)
-        {
-            ProjectilePlayer projectile = projectilePool[AddNewProjectileToPool()];
-            ProjectileRefresh(0, playerPosition);
-            return projectile;
-        }
-
-        for (int i = 0; i < projectilePool.Count; i++)
-        {
-            if (projectilePool[i].gameObject.activeInHierarchy == false)
-            {
-                ProjectileRefresh(i, playerPosition);
-                return projectilePool[i];
-            }
-        }
-
-        return projectilePool[AddNewProjectileToPool()];
-    }
-
-    private int AddNewProjectileToPool()
-    {
-        ProjectilePlayer projectile = Instantiate(prefabProjectile, transform.position, transform.rotation, projectilesInWorld);
-        projectilePool.Add(projectile);
-        return projectilePool.Count - 1;
-    }
-
-    private void ProjectileRefresh(int i, Vector3 playerPosition)
-    {
-        projectilePool[i].gameObject.transform.position = playerPosition;
-        projectilePool[i].SetConfigurations(this.projectileLifeTime, this.projectileSpeed, transform.up, false);
-    }
-
     private void PlayerRotateKeyboard(float direction)
     {
         transform.rotation *= Quaternion.Euler(transform.rotation.x, transform.rotation.y, rotateSpeed * direction);
@@ -213,7 +175,8 @@ public class Player : MonoBehaviour, IKillable
 
     private void Shoot()
     {
-        ProjectileGetFromPool(transform.position).gameObject.SetActive(true);
+        ProjectilePlayer projectile = projectilePoolPlayer.GetFromPool(this.transform, this.projectileLifeTime, this.projectileSpeed);
+        projectile.gameObject.SetActive(true);
         StartCoroutine(AttackCooldown());
     }
 
@@ -222,14 +185,6 @@ public class Player : MonoBehaviour, IKillable
         isCooldown = true;
         yield return new WaitForSeconds(this.attackCooldown);
         isCooldown = false;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.gameObject.CompareTag("UFO") || collider.gameObject.CompareTag("Asteroid"))
-        {
-            Kill(Sender.None);
-        }
     }
 
     private void SetInvulnerability(float duration, float animPeriod)
@@ -250,5 +205,13 @@ public class Player : MonoBehaviour, IKillable
             timer += animPeriod;
         }
         isInvulnerable = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.TryGetComponent<UFO>(out UFO ufo) || collider.gameObject.TryGetComponent<Asteroid>(out Asteroid asteroid))
+        {
+            Kill(Sender.None);
+        }
     }
 }

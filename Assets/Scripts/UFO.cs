@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class UFO : MonoBehaviour, IKillable
 {
@@ -6,14 +7,14 @@ public class UFO : MonoBehaviour, IKillable
     [SerializeField] private float projectileSpeed;
 
     private LevelManager levelManager;
+    private ProjectilePoolUFO projectilePoolUFO;
     private float speed;
     private Vector3 direction;
     private float timer;
     private float lifetime;
-    private float shootCooldown;
-    private float shootTimer;
     private Transform playerTransform;
     private float projectileLifeTime;
+    private bool isCooldown = true;
 
     public void Kill(Sender sender)
     {
@@ -26,10 +27,13 @@ public class UFO : MonoBehaviour, IKillable
         gameObject.SetActive(false);
     }
 
-    public void SetConfigurations(LevelManager manager, int direction, float speed, float lifetime, Transform playerTransform)
+    public void SetConfigurations(LevelManager manager, ProjectilePoolUFO projectilePoolUFO, int direction, float speed, float lifetime, Transform playerTransform)
     {
         if (levelManager == null)
             this.levelManager = manager;
+
+        if (this.projectilePoolUFO == null)
+            this.projectilePoolUFO = projectilePoolUFO;
 
         if (this.playerTransform == null)
             this.playerTransform = playerTransform;
@@ -41,14 +45,22 @@ public class UFO : MonoBehaviour, IKillable
         this.direction = new Vector3(direction, 0, 0);
         this.timer = 0;
         this.lifetime = lifetime;
-        this.shootCooldown = RandomShootCooldown();
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(AttackCooldown());
     }
 
     private void FixedUpdate()
     {
         transform.position += speed * direction * Time.deltaTime;
         Lifetime();
-        ShootCooldown();
+
+        if(isCooldown == false)
+        {
+            Shoot();
+        }
     }
 
     private void Lifetime()
@@ -63,36 +75,33 @@ public class UFO : MonoBehaviour, IKillable
 
     private void Shoot()
     {
-        var direction = playerTransform.position - transform.position;
-        var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        ProjectileUFO projectile = Instantiate(projectileUFO, transform.position, Quaternion.Euler(0, 0, angle));
-        projectile.SetConfigurations(projectileLifeTime, projectileSpeed, projectile.transform.right, true);
-        levelManager.AddProjectileUFOToPool(projectile);
+        var dir = playerTransform.position - transform.position;
+        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Vector3 direction = new Vector3(0, 0, angle);
+        ProjectileUFO projectile = projectilePoolUFO.GetFromPool(transform, direction, lifetime, projectileSpeed);
+        projectile.gameObject.SetActive(true);
+        StartCoroutine(AttackCooldown());
     }
 
-    private void ShootCooldown()
+    private IEnumerator AttackCooldown()
     {
-        shootTimer += Time.deltaTime;
-
-        if (shootTimer > shootCooldown)
-        {
-            shootTimer = 0;
-            shootCooldown = RandomShootCooldown();
-            Shoot();
-        }
+        isCooldown = true;
+        yield return new WaitForSeconds(RandomShootCooldown());
+        if(gameObject.activeInHierarchy)
+            isCooldown = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("Player"))
+        if (collider.gameObject.TryGetComponent<Player>(out Player player))
         {
-            if (collider.gameObject.GetComponent<Player>().IsInvulnerable == false)
+            if (player.IsInvulnerable == false)
             {
                 Kill(Sender.Player);
             }
         }
 
-        if (collider.gameObject.CompareTag("Asteroid"))
+        if (collider.gameObject.TryGetComponent<Asteroid>(out Asteroid asteroid))
         {
             Kill(Sender.None);
         }
@@ -100,6 +109,6 @@ public class UFO : MonoBehaviour, IKillable
 
     private float RandomShootCooldown()
     {
-        return Random.Range(2.0f, 5.0f);
+        return Random.Range(1.0f, 3.0f);
     }
 }

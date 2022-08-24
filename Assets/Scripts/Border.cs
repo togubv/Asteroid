@@ -36,9 +36,3 @@ public class Border : MonoBehaviour
         return;
     }
 }
-
-public enum BorderAxis
-{
-    x,
-    y
-}
